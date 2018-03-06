@@ -288,6 +288,7 @@ static int fprintf_sam(FILE * fp, const char *readname, const char * prefix,
 int main_raw(int argc, char * argv[]){
     #if defined(_OPENMP)
         omp_set_nested(1);
+        disable_openmp_if_hdf5_not_threaded();
     #endif
     argp_parse(&argp, argc, argv, 0, 0, NULL);
     if(NULL == args.output){

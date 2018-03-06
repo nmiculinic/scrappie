@@ -227,3 +227,16 @@ void write_annotated_raw(hid_t hdf5file, const char *readname,
                          int compression_level) {
     return;
 }
+
+#if defined(_OPENMP)
+#    include <omp.h>
+void disable_openmp_if_hdf5_not_threaded(void){
+    hbool_t ret = false;
+    herr_t err = H5is_library_threadsafe(&ret);
+    if(err < 0|| !ret){
+        omp_set_num_threads(1);
+        warnx("libhdf5 does not support multithreaded access.  Scrappie will only use one thread\n");
+    }
+}
+#endif
+
